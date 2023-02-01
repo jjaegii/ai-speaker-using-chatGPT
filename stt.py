@@ -13,11 +13,10 @@ def listen():
     except Exception as e:
         print("들은게 없어용")
         return []
-    if len(data) == 0:
-        print("들은게 없어용")
+    if data == []:
         return []
 
-    if '대답' in data['alternative'][0]['transcript']:
+    if '야' in data['alternative'][0]['transcript']:
         speak('네, 말씀하세요.')
         with sr.Microphone() as source:
             print("듣고 있습니다.")
@@ -28,3 +27,5 @@ def listen():
         except Exception as e:
             return ["nospeak"]
         return data
+    else:
+        return []
