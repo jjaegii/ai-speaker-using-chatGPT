@@ -1,2 +1,0 @@
-https://keep-steady.tistory.com/m/51 참고
-공식적으로 api 신청을 할 수 있는데 이거 쓰면 속도가 더 빨라지는지 테스트 해보기
