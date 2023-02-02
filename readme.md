@@ -19,6 +19,11 @@
 
 ~~3. shell 창 종료 후 python3 run.py로 실행~~
 
+https://platform.openai.com/account/api-keys 에서 api 키를 발급 받은 후 chat.py My_OpenAI_key에 적용
+
+### docker
+docker run --device /dev/snd:/dev/snd -it ubuntu:ai-speaker-using-chatGPT python3 run.py
+
+### just on device
 1. pip install -r requirements.txt
-2. https://platform.openai.com/account/api-keys 에서 api 키를 발급 받은 후 chat.py My_OpenAI_key에 적용
-3. python run.py
+2. python run.py
