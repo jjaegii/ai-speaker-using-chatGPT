@@ -6,6 +6,7 @@ Recognizer = sr.Recognizer()
 def listen():
     with sr.Microphone() as source:
         print("듣고 있습니다.")
+        Recognizer.adjust_for_ambient_noise(source=source)
         # phrase_time_limit = 음성 듣는 시간(초) 제한, timeout = x초 동안 음성이 들어오지 않으면 에러 리턴
         audio = Recognizer.listen(source, phrase_time_limit=3, timeout=0)
     try:
