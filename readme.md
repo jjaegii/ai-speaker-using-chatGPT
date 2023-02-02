@@ -1,5 +1,11 @@
 # AI speaker using chatGPT
 
+[웹앱](https://github.com/jjaegii/ai-speaker-using-chatGPT/)
+
+[라즈베리파이 구글번역](https://github.com/jjaegii/ai-speaker-using-chatGPT/tree/raspberryPi)
+
+[라즈베리파이 파파고번역](https://github.com/jjaegii/ai-speaker-using-chatGPT/tree/papago_translate)
+
 ### 속도 측정
 
 1. https://github.com/acheong08/ChatGPT vs 2. https://github.com/mmabrouk/chatgpt-wrapper(python) vs 3. https://github.com/mmabrouk/chatgpt-wrapper(shell)
