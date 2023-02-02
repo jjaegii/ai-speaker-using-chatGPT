@@ -5,15 +5,14 @@ load_dotenv()
 api_key = os.environ.get('openai_API_KEY')
 
 import openai
-from googletrans import Translator
 
 openai.api_key = api_key
 completion = openai.Completion()
 
-translator = Translator()
+from translate import papago_translate
 
 def ask(prompt):
-    en_prompt = translator.translate(prompt, src='ko', dest='en').text
+    en_prompt = papago_translate(prompt, 'ko', 'en')
     response = openai.Completion.create(
         model="text-davinci-003",
         prompt=en_prompt,
@@ -26,7 +25,7 @@ def ask(prompt):
         )
     answer = response.choices[0].text.strip()
 
-    return translator.translate(answer, src='en', dest='ko').text
+    return papago_translate(answer, 'en', 'ko')
 
 # https://github.com/acheong08/ChatGPT readme 1번
 '''
