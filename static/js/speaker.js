@@ -1,3 +1,23 @@
+function tts(text) {
+  if (!window.speechSynthesis) {
+    alert("음성 재생을 지원하지 않는 브라우저입니다.");
+  }
+
+  const utterance = new SpeechSynthesisUtterance(text);
+  const lang = "ko-KR";
+
+  utterance.onerror = function (e) {
+    console.log("error", e);
+  };
+
+  utterance.lang = lang;
+  utterance.pitch = 1;
+  utterance.rate = 1;
+
+  console.log(text);
+  window.speechSynthesis.speak(utterance);
+}
+
 window.SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 
@@ -10,45 +30,48 @@ function sttSet() {
   recognition.lang = "ko-KR";
   // true means continuous, and false means not continuous (single result each time.)
   // true면 음성 인식이 안 끝나고 계속 됩니다.
-  recognition.continuous = true;
+  recognition.continuous = false;
   // 숫자가 작을수록 발음대로 적고, 크면 문장의 적합도에 따라 알맞은 단어로 대체합니다.
   // maxAlternatives가 크면 이상한 단어도 문장에 적합하게 알아서 수정합니다.
   recognition.maxAlternatives = 10000;
 }
 sttSet();
 
-function tts(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(utterance);
-}
-
 let isCalled = false;
 recognition.addEventListener("result", (e) => {
   for (let i = e.resultIndex, len = e.results.length; i < len; i++) {
     let transcript = e.results[i][0].transcript;
     console.log(transcript);
-    if (transcript == "야") {
+    if ((transcript == "야" || transcript == " 야") && isCalled == false) {
       tts("부르셨나요?");
       isCalled = true;
     }
-    if (isCalled == true) {
-      fetch("http://192.168.0.128:5000/ask", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(transcript),
-      })
-        .then((response) => response.json())
-        .then((data) => tts(data));
-
-      isCalled = false;
-    }
+    // if (transcript != "야" && isCalled == true) {
+    //   fetch("/ask", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(transcript),
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => {
+    //       console.log(data["answer"]);
+    //       tts(data["answer"]);
+    //     })
+    //     .then(() => (isCalled = false));
+    // }
   }
 });
 
 // 음성인식이 끝나면 자동으로 재시작합니다.
-// recognition.addEventListener("end", recognition.start);
+recognition.addEventListener("end", recognition.start);
 
 // 음성 인식 시작
 recognition.start();
+
+setTimeout(() => {
+  setInterval(() => {
+    tts("안녕?");
+  }, 1000);
+}, 3000);
