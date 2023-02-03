@@ -1,3 +1,15 @@
+const start_btn = document.getElementById("start_btn");
+start_btn.addEventListener("click", () => {
+  tts('안녕하세요 반갑습니다. 저를 부르시려면 "야" 라고 불러주세요');
+  q.hidden = false;
+  a.hidden = false;
+});
+
+const q = document.getElementById("q");
+const a = document.getElementById("a");
+
+const synth = window.speechSynthesis;
+
 function tts(text) {
   if (!window.speechSynthesis) {
     alert("음성 재생을 지원하지 않는 브라우저입니다.");
@@ -16,6 +28,7 @@ function tts(text) {
 
   console.log(text);
   window.speechSynthesis.speak(utterance);
+  a.innerText = "A:" + text;
 }
 
 window.SpeechRecognition =
@@ -42,25 +55,26 @@ recognition.addEventListener("result", (e) => {
   for (let i = e.resultIndex, len = e.results.length; i < len; i++) {
     let transcript = e.results[i][0].transcript;
     console.log(transcript);
+    q.innerText = "Q:" + transcript;
     if ((transcript == "야" || transcript == " 야") && isCalled == false) {
-      tts("부르셨나요?");
+      tts("네 부르셨나요?");
       isCalled = true;
     }
-    // if (transcript != "야" && isCalled == true) {
-    //   fetch("/ask", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(transcript),
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       console.log(data["answer"]);
-    //       tts(data["answer"]);
-    //     })
-    //     .then(() => (isCalled = false));
-    // }
+    if (transcript != "야" && isCalled == true) {
+      fetch("/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(transcript),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data["answer"]);
+          tts(data["answer"]);
+        })
+        .then(() => (isCalled = false));
+    }
   }
 });
 
@@ -69,9 +83,3 @@ recognition.addEventListener("end", recognition.start);
 
 // 음성 인식 시작
 recognition.start();
-
-setTimeout(() => {
-  setInterval(() => {
-    tts("안녕?");
-  }, 1000);
-}, 3000);
